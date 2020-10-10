@@ -57,8 +57,6 @@ class Streamer:
         streamer = Stream(self.auth, self.listen)
         streamer.filter(track=input_filter)
 
-    # sort.convert_to_csv()
-
 
 if __name__ == "__main__":
     filter_list = ["Donald Trump"]
