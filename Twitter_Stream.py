@@ -51,14 +51,34 @@ class Streamer:
         self.listen = Listener(time_limit=time_limit)
         self.auth = OAuthHandler(Twitter_Credentials.API_KEY, Twitter_Credentials.API_KEY_SECRET)
         self.auth.set_access_token(Twitter_Credentials.ACCESS_TOKEN, Twitter_Credentials.ACCESS_TOKEN_SECRET)
+        
+    # This constructor authenticates the API key and access token. This constructor searches for previous tweets
+    def __init__(self):
+        self.auth = OAuthHandler(Twitter_Credentials.API_KEY, Twitter_Credentials.API_KEY_SECRET)
+        self.auth.set_access_token(Twitter_Credentials.ACCESS_TOKEN, Twitter_Credentials.ACCESS_TOKEN_SECRET)
 
     # This method output any tweets that are related to the user's input
     def output_tweets(self, input_filter):
         streamer = Stream(self.auth, self.listen)
         streamer.filter(track=input_filter)
+    
+    def output_previous_tweets(self):
+        api = API(self.auth, wait_on_rate_limit=True)
+        csv_file = open('tweets_data_privacy.csv', 'w', newline='', encoding="utf-8") # opens csv file
+        writer = csv.writer(csv_file)
+        fieldnames = ['created at', 'text', 'name',
+                      'screen name', 'location',
+                      'verified', 'followers count', 'friends count',
+                      'retweet count', 'favorite count']  # fieldnames
+        writer.writerow(fieldnames)  # write fieldnames into header of the csv file
+        # fetches for tweets based on keywords and filters out any retweets. Tweepy's API will filter out user 
+        # information.
+        for tweet in Cursor(api.search, q="data privacy -filter:retweets", lang="en", since="2020-10-03", until="2020-10-9").items(50000): 
+            writer.writerow([tweet.created_at, tweet.text.encode('unicode_escape'),
+                             tweet.user.name, tweet.user.screen_name, tweet.user.location,
+                             tweet.user.verified, tweet.user.followers_count,
+                             tweet.user.friends_count, tweet.retweet_count,
+                             tweet.favorite_count])
 
 
 if __name__ == "__main__":
-    filter_list = ["Donald Trump"]
-    stream = Streamer(time_limit=5000)
-    stream.output_tweets(filter_list)
