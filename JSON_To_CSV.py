@@ -13,14 +13,14 @@ def organize():
     writer.writerow(fieldnames)  # writes fieldnames on the first row
 
     # gets fields from the json object and writes a row into csv file
-    for header in json_data:
-        if header.get('lang') != "en":  # if the tweet is not in english, don't write in csv file
+    for tweet in json_data:
+        if tweet.get('lang') != "en":  # if the tweet is not in english, don't write in csv file
             continue
         else:
-            writer.writerow([header.get('created_at'), header.get('text').encode('unicode_escape'),
-                            header.get('user').get('screen_name'), header.get('user').get('location'),
-                            header.get('user').get('verified'), header.get('user').get('followers_count'),
-                            header.get('user').get('friends_count')])
+            writer.writerow([tweet.get('created_at'), tweet.get('text').encode('unicode_escape'),
+                            tweet.get('user').get('screen_name'), tweet.get('user').get('location'),
+                            tweet.get('user').get('verified'), tweet.get('user').get('followers_count'),
+                            tweet.get('user').get('friends_count')])
     csv_file.close()
 
 
