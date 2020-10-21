@@ -65,6 +65,7 @@ class Streamer:
         streamer = Stream(self.auth, self.listen)
         streamer.filter(track=input_filter)
     
+    # This method outputs any previous tweets up to a week from the current date. 
     def output_previous_tweets(self):
         api = API(self.auth, wait_on_rate_limit=True)
         csv_file = open('tweets_data_privacy.csv', 'w', newline='', encoding="utf-8") # opens csv file
@@ -82,6 +83,18 @@ class Streamer:
                              tweet.user.verified, tweet.user.followers_count,
                              tweet.user.friends_count, tweet.retweet_count,
                              tweet.favorite_count])
-
+            
+     # this method filters out anything unrelated to data privacy.
+     def filter(self):
+        read = pd.read_csv("tweets_data_privacy.csv")# reads in CSV file
+        df = pd.DataFrame(read)# turns CSV file into data frame
+        new_data = df[~df['name'].str.contains('news|News|.com|EducationLaw|Honey|Roger Verhoeven|'
+                                               'Policy Pro\'s - Business Policy Writers|Coca-Cola GB|JD Supra|'
+                                               'Privacy Watch|Giridhar|QV Develop|Data Vault|Privacy Professionals Briefly|'
+                                               'PrivacyPro_b|Privacy Tech Briefly|PrivacyTech_b|Hacking Essentials|Lost Coast Outpost|'
+                                               'NortonRoseFulbright|Urdhva Tech|SGV Tribune|O.C. Register|Daniel Haran|Anas Najeeb|report|'
+                                               'Report|SAP Customer Data Cloud')]
+        #filters any names that contain any words that match with the words above.
+        new_data.to_csv('filtered_tweets.csv', index=False)# returns a new CSV file
 
 if __name__ == "__main__":
