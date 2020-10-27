@@ -1,4 +1,4 @@
-# Twitter Sentiment Analysis Project
+# Twitter Sentiment Analysis Project #
 
 The following project is to create a data set on Twitter. The project is to look for tweets
 that are related to privacy(as in data from websites,software,etc) or trust(whether the person
@@ -11,19 +11,18 @@ and technology. The audience would be presented with graphs or data set to visua
 correlation.
 
 
-# Getting Started
+## Getting Started
 First go to https://developer.twitter.com/apps to sign up. You will need the access token, access token secret, API key and API key secret.
 
-# Installation 
+## Installation
 1. You can directly download the files by downloading as a ZIP file
 2. You could also clone this GitHub repository
 
-# Usage
+## Usage
 When you finish downloading or cloning the respository go to Twitter_Credentials.py to input the tokens and API keys. Then run main.py, the script will ask for the dates you want to fetch from. Once the script is done running, tweets of the csv files will be generated.
 
-# Built With
-Python 3.8
-Pandas
-Tweepy
-TextBlob
-
+## Built With
+* Python 3.8
+* Pandas
+* Tweepy
+* TextBlob
