@@ -7,20 +7,31 @@ class Analysis:
 
     #This method checks whether or not polarity and subjectivity
     def polarity_and_subjectivity(self):
-        read = pd.read_csv("filtered_tweets.csv") # reads in CSV file
-        new_column = pd.DataFrame(read['text']) # selects the text column and puts it into a data frame
-        new_column.insert(0, 'name', read['name']) # inserts column called name into the data frame
-        new_column.insert(1, 'followers count',read['followers count']) # inserts column called followers count into the data frame
-        new_column.insert(2, 'friends count',read['friends count']) # inserts column called followers count into the data frame
+        read = pd.read_csv("Voting.csv")  # reads in CSV file
+        new_column = pd.DataFrame(read['text'])  # selects the text column and puts it into a data frame
+        new_column.insert(0, 'name', read['name'])  # inserts column called name into the data frame
+        new_column.insert(1, 'followers count', read['followers count']) # inserts column called followers count into the data frame
+        new_column.insert(2, 'friends count', read['friends count']) # inserts column called followers count into the data frame
         new_column.insert(3, 'retweet count', read['retweet count'])  # inserts column called retweet count into data frame
         new_column.insert(4, 'favorite count', read['favorite count']) # inserts column called favorite count into data frame
-        new_column['polarity'] = new_column.apply(lambda x: TextBlob(x['text']).sentiment.polarity, axis=1) # Inserts a new column by sentimental analysis of the text column
-        new_column['subjectivity'] = new_column.apply(lambda x: TextBlob(x['text']).sentiment.subjectivity, axis=1) # Inserts a new column by sentimental analysis of the text column
-        polarity_range_df = new_column['polarity'].between(-0.2, 0.2, inclusive=True) # searches for tweets that are in the range of -0.2 to 0.2 in polarity.
-        subject_range_df = new_column['subjectivity'].between(0.4, 0.6, inclusive=True) # searches for tweets that are in the range of 0.4 to 0.6 in subjectivity.
-        new_column.insert(7, 'polarity between -0.2 to 0.2', polarity_range_df) # inserts the polarity range into data frame
-        new_column.insert(9, 'subjectivity between 0.4 to 0.6', subject_range_df) # inserts the subjectivity range into data frame
-        new_column.to_csv('data_privacy_sentiment_analysis.csv', index=False) # puts the dataframe into a new csv file
+        new_column['polarity'] = new_column.apply(lambda x: TextBlob(x['text']).sentiment.polarity,
+                                                  axis=1)  # Inserts a new column by sentimental analysis of the text column
+        new_column['subjectivity'] = new_column.apply(lambda x: TextBlob(x['text']).sentiment.subjectivity,
+                                                      axis=1)  # Inserts a new column by sentimental analysis of the text column
+        # separates range into 3 classes for polarity and subjectivity
+        polarity_class0 = new_column['polarity'].between(-1.0, -0.2, inclusive=True)
+        polarity_class1 = new_column['polarity'].between(-0.2, 0.2, inclusive=False)
+        polarity_class2 = new_column['polarity'].between(0.2, 1.0, inclusive=True)
+        subject_class0 = new_column['subjectivity'].between(0.0, 0.4, inclusive=True)
+        subject_class1 = new_column['subjectivity'].between(0.4, 0.6, inclusive=False)
+        subject_class2 = new_column['subjectivity'].between(0.6, 1.0, inclusive=True)
+        new_column.insert(7, 'polarity between 0.2 to 1 (class 0)', polarity_class0)
+        new_column.insert(8, 'polarity between -0.2 to 0.2 (class 1)', polarity_class1)
+        new_column.insert(9, 'polarity between 0.2 to 1 (class 2)', polarity_class2)
+        new_column.insert(11, 'subjectivity between 0 to 0.4 (class 0)',  subject_class0)
+        new_column.insert(12, 'subjectivity between 0.4 to 0.6 (class 1)', subject_class1)
+        new_column.insert(13, 'subjectivity between 0.6 to 1 (class 2)',  subject_class2)
+        new_column.to_csv('Voting_sentiment_analysis.csv', index=False)  # puts the dataframe into a new csv file
     
     #this method plots a scatter plot based on polarity, favorites, retweets and subjectivity.
     def scatter_plot(self):
