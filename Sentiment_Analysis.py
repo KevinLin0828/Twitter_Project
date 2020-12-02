@@ -84,6 +84,26 @@ class Analysis:
         df = pd.DataFrame(data)
         newdata = df[df['polarity between -0.2 to 0.2'].str.contains('True') & df['subjectivity between 0.4 to 0.6'].str.contains('True')]
         newdata.to_csv('polarity_and _subjectivity_range.csv', index=False)
+    
+    def subjectivity_class(self):
+        data = pd.read_csv("Voting_sentiment_analysis.csv",  dtype={'subjectivity between 0 to 0.4 (class 0)': str, 'subjectivity between 0.4 to 0.6 (class 1)': str, 'subjectivity between 0.6 to 1 (class 2)': str})
+        df = pd.DataFrame(data)
+        df.loc[df['subjectivity between 0 to 0.4 (class 0)'].str.contains('True'), 'SubjectivityClass'] = '0'
+        df.loc[df['subjectivity between 0.4 to 0.6 (class 1)'].str.contains('True'), 'SubjectivityClass'] = '1'
+        df.loc[df['subjectivity between 0.6 to 1 (class 2)'].str.contains('True'), 'SubjectivityClass'] = '2'
+        df.to_csv('Voting_sentiment_analysis.csv', index=False)
+        
+    def to_classification(self):
+        read = pd.read_csv("Voting_sentiment_analysis.csv")  # reads in CSV file
+        new_column = pd.DataFrame()  # selects the text column and puts it into a data frame
+        new_column.insert(0, 'followers count', read['followers count'])  # inserts column called followers count into the data frame
+        new_column.insert(1, 'friends count', read['friends count'])  # inserts column called followers count into the data frame
+        new_column.insert(2, 'retweet count', read['retweet count'])
+        new_column.insert(3, 'favorite count', read['favorite count'])
+        new_column.insert(4, 'polarity', read['polarity'])
+        new_column.insert(5, 'SubjectivityClass', read['SubjectivityClass'])
+        new_column.to_csv('Voting_sentiment_analysis_classification.csv', index=False)
+
         
 if __name__ == "__main__":
     analysis = Analysis()
