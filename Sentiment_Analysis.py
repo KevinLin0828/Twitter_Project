@@ -79,7 +79,7 @@ class Analysis:
         plt.show()
     
     #This method shows the tweets that contain in the range of -0.2 to 0.2 in polarity and of 0.4 to 0.6 in subjectivity.
-    def polarity_subjectivity_range(self):
+    def polarity_subjectivity_neutral(self):
         data = pd.read_csv("data_privacy_sentiment_analysis.csv",  dtype={'polarity between -0.2 to 0.2': str,'subjectivity between 0.4 to 0.6': str})
         df = pd.DataFrame(data)
         newdata = df[df['polarity between -0.2 to 0.2'].str.contains('True') & df['subjectivity between 0.4 to 0.6'].str.contains('True')]
